@@ -1,0 +1,13 @@
+###############################################################################
+# Set default behavior to automatically normalize line endings.
+###############################################################################
+*           text=auto
+
+###############################################################################
+# Set default behavior for image files.
+# Image files are treated as binary by default.
+###############################################################################
+*.jpg       binary
+*.png       binary
+*.gif       binary
+*.ico       binary
