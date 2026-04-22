@@ -25,25 +25,31 @@ import getDefaultInputSourceManager from "./getDefaultInputSourceManager.js";
 import InputSourceManagerMonitor, { InputSourceManagerMonitorJSDocClass } from "./InputSourceManagerMonitor.js";
 
 /**
- * Contains the singleton instance of the InputSourceManagerMonitor class.
- * @type {InputSourceManagerMonitorJSDocClass | null}
- * */
-let _inputSourceManagerMonitor = null;
-
-/**
  * Represents the extension, contains the entry point for GNOME Shell.
  * @exports
  */
 export default class UppercaseInputSourceIndicatorExtension extends Extension {
   /**
+   * Initializes a new instance of the UppercaseInputSourceIndicatorExtension class.
+   * @public
+   */
+  constructor() {
+    /**
+     * Contains the singleton instance of the InputSourceManagerMonitor class.
+     * @type {InputSourceManagerMonitorJSDocClass | null}
+     * */
+    this._inputSourceManagerMonitor = null;
+  }
+
+  /**
    * Enables the extension.
    * @public
    */
   enable() {
-    if (_inputSourceManagerMonitor != null) {
+    if (this._inputSourceManagerMonitor != null) {
       return;
     }
-    _inputSourceManagerMonitor = new InputSourceManagerMonitor(getDefaultInputSourceManager());
+    this._inputSourceManagerMonitor = new InputSourceManagerMonitor(getDefaultInputSourceManager());
   }
 
   /**
@@ -56,10 +62,7 @@ export default class UppercaseInputSourceIndicatorExtension extends Extension {
      * This extension uses the 'unlock-dialog' session mode because there is also an input source indicator on the lock screen.
      * It is also changed to make it consistent with the panel on the unlocked desktop.
      */
-    if (_inputSourceManagerMonitor == null) {
-      return;
-    }
-    _inputSourceManagerMonitor.stop();
-    _inputSourceManagerMonitor = null;
+    this._inputSourceManagerMonitor?.stop();
+    this._inputSourceManagerMonitor = null;
   }
 }
