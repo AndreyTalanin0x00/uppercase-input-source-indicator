@@ -8,6 +8,8 @@ While this extension should work with IBus-powered input method editors, they ha
 
 Feel free to report any issues or to ask to add support for the latest GNOME Shell version.
 
+[You can get this extension here (extensions.gnome.org).](https://extensions.gnome.org/extension/8672/uppercase-input-source-indicator/)
+
 ## System Requirements
 
 This extension has been confirmed to work on the following GNOME Shell major versions:  
