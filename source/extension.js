@@ -31,9 +31,12 @@ import InputSourceManagerMonitor, { InputSourceManagerMonitorJSDocClass } from "
 export default class UppercaseInputSourceIndicatorExtension extends Extension {
   /**
    * Initializes a new instance of the UppercaseInputSourceIndicatorExtension class.
+   * @param {{ name: string, description: string, uuid: string }} metadata The extension's metadata.
    * @public
    */
-  constructor() {
+  constructor(metadata) {
+    super(metadata);
+
     /**
      * Contains the singleton instance of the InputSourceManagerMonitor class.
      * @type {InputSourceManagerMonitorJSDocClass | null}
