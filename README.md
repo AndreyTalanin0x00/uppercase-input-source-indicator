@@ -2,6 +2,8 @@
 
 A GNOME Shell extension that makes the current input source (language) indicator uppercase.
 
+![Screenshot](images/screenshot.jpg)
+
 While this extension should work with IBus-powered input method editors, they have not been tested extensively.
 
 Feel free to report any issues or to ask to add support for the latest GNOME Shell version.
