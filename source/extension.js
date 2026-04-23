@@ -1,7 +1,7 @@
 /**
  * extension.js
  *
- * Copyright (c) 2025 Andrey Talanin
+ * Copyright (c) 2025-2026 Andrey Talanin
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,9 +31,12 @@ import InputSourceManagerMonitor, { InputSourceManagerMonitorJSDocClass } from "
 export default class UppercaseInputSourceIndicatorExtension extends Extension {
   /**
    * Initializes a new instance of the UppercaseInputSourceIndicatorExtension class.
+   * @param {{ name: string, description: string, uuid: string }} metadata The extension's metadata.
    * @public
    */
-  constructor() {
+  constructor(metadata) {
+    super(metadata);
+
     /**
      * Contains the singleton instance of the InputSourceManagerMonitor class.
      * @type {InputSourceManagerMonitorJSDocClass | null}
