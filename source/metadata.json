@@ -2,7 +2,7 @@
   "name": "Uppercase Input Source Indicator",
   "description": "Makes the current input source (language) indicator uppercase. Works with IBus input method editors, too.",
   "uuid": "uppercase-input-source-indicator@andreytalanin0x00.github.io",
-  "shell-version": ["46", "47", "48", "49"],
+  "shell-version": ["46", "47", "48", "49", "50"],
   "url": "https://github.com/AndreyTalanin0x00/uppercase-input-source-indicator",
   "session-modes": ["user", "unlock-dialog"],
   "version-name": "1.0"
