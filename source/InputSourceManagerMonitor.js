@@ -1,7 +1,7 @@
 /**
  * InputSourceManagerMonitor.js
  *
- * Copyright (c) 2025 Andrey Talanin
+ * Copyright (c) 2026 Andrey Talanin
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 import GObject from "gi://GObject";
 import { InputSourceManager } from "resource:///org/gnome/shell/ui/status/keyboard.js";
 
-import InputSourceIndicatorController, { InputSourceIndicatorControllerJSDocClass } from "./InputSourceIndicatorController.js";
+import InputSourceIndicatorLabelService, { InputSourceIndicatorLabelServiceJSDocClass } from "./InputSourceIndicatorLabelService.js";
 
 /**
  * Represents an input source manager signal subscription.
@@ -72,12 +72,15 @@ class InputSourceManagerSignalSubscription {
  */
 class InputSourceManagerMonitor extends GObject.Object {
   /**
-   * Initializes a new instance of the InputSourceManagerMonitor class, subscribing it to the signals and setting the current input source label to uppercase.
+   * Initializes a new instance of the InputSourceManagerMonitor class, subscribing it to the signals and updating the initial current input sources, setting their short names to uppercase.
    * @param {InputSourceManager} inputSourceManager The input source manager.
    * @public
    */
   constructor(inputSourceManager) {
     super();
+
+    /** Defines the 'sources-changed' signal name. */
+    this._INPUT_SOURCES_CHANGED_SIGNAL_NAME = "sources-changed";
 
     /** Defines the 'current-source-changed' signal name. */
     this._CURRENT_INPUT_SOURCE_CHANGED_SIGNAL_NAME = "current-source-changed";
@@ -94,28 +97,32 @@ class InputSourceManagerMonitor extends GObject.Object {
      */
     this._active = true;
     /**
-     * Contains the input source indicator controller.
-     * @type {InputSourceIndicatorControllerJSDocClass}
+     * Contains the input source indicator label service.
+     * @type {InputSourceIndicatorLabelServiceJSDocClass}
      */
-    this._inputSourceIndicatorController = new InputSourceIndicatorController(inputSourceManager);
+    this._inputSourceIndicatorLabelService = new InputSourceIndicatorLabelService(inputSourceManager);
+    /**
+     * Contains the subscription to the 'sources-changed' signal of the input source manager.
+     */
+    this._inputSourcesChangedSignalSubscription = new InputSourceManagerSignalSubscription(
+      inputSourceManager,
+      this._INPUT_SOURCES_CHANGED_SIGNAL_NAME,
+      this._updateInitialInputSourceShortNames.bind(this)
+    );
     /**
      * Contains the subscription to the 'current-source-changed' signal of the input source manager.
      */
     this._currentInputSourceChangedSignalSubscription = new InputSourceManagerSignalSubscription(
       inputSourceManager,
       this._CURRENT_INPUT_SOURCE_CHANGED_SIGNAL_NAME,
-      this._changeCurrentInputSourceLabelTextCase.bind(this)
+      this._updateCurrentInputSourceShortName.bind(this)
     );
 
-    const changeSuccessful = this._tryChangeCurrentInputSourceLabelTextCase();
-    if (!changeSuccessful) {
-      console.error("Stopping the input source manager monitor as non-functional, most likely because of a GNOME Shell major change.");
-      this.stop();
-    }
+    this._inputSourceIndicatorLabelService.updateInitialInputSourceShortNames();
   }
 
   /**
-   * Stops the input source manager monitor, unsubscribing it from signals and restoring the original input source labels.
+   * Stops the input source manager monitor, unsubscribing it from signals and restoring the original input sources, setting their short names to the original values.
    * @public
    */
   stop() {
@@ -124,33 +131,33 @@ class InputSourceManagerMonitor extends GObject.Object {
     }
 
     this._active = false;
+    this._inputSourcesChangedSignalSubscription.cancel();
     this._currentInputSourceChangedSignalSubscription.cancel();
-    this._restoreInputSourceLabelTexts();
+    this._restoreInputSourceShortNames();
   }
 
   /**
-   * Changes the case of the input source indicator label for the current input source to uppercase.
+   * Updates the current input source and sets its short name to uppercase.
    * @private
    */
-  _changeCurrentInputSourceLabelTextCase() {
-    this._inputSourceIndicatorController.changeCurrentInputSourceLabelTextCase(true);
+  _updateCurrentInputSourceShortName() {
+    this._inputSourceIndicatorLabelService.updateCurrentInputSourceShortName();
   }
 
   /**
-   * Attempts to change the case of the input source indicator label for the current input source to uppercase and returns a boolean value indicating whether the change attempt was successful.
-   * @returns {boolean} The boolean value indicating whether the change attempt was successful.
+   * Updates the initial input sources and sets their short names to uppercase.
    * @private
    */
-  _tryChangeCurrentInputSourceLabelTextCase() {
-    return this._inputSourceIndicatorController.tryChangeCurrentInputSourceLabelTextCase(true);
+  _updateInitialInputSourceShortNames() {
+    this._inputSourceIndicatorLabelService.updateInitialInputSourceShortNames();
   }
 
   /**
-   * Restores input source indicator labels to their original values.
+   * Restores all input sources and sets their short names to the original values.
    * @private
    */
-  _restoreInputSourceLabelTexts() {
-    this._inputSourceIndicatorController.restoreInputSourceLabelTexts();
+  _restoreInputSourceShortNames() {
+    this._inputSourceIndicatorLabelService.restoreInputSourceShortNames();
   }
 }
 
