@@ -12,8 +12,8 @@ Feel free to report any issues or to ask to add support for the latest GNOME She
 
 ## System Requirements
 
-This extension has been confirmed to work on the following GNOME Shell major versions:  
-`46.x`, `47.x`, `48.x`, `49.x`, `50.x`.
+This extension has been confirmed to work on the following range of GNOME Shell major versions:  
+`46.x` (available on Ubuntu 24.x LTS) - `51.x` (latest).
 
 ## GNOME Educational Resources
 
